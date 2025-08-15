@@ -1,0 +1,13 @@
+model_config:
+  conv_blocks: 4
+  channels: [1,64,128,256,512]
+  kernels: [7, 3, 3, 3]
+  categories: 10
+  fc_blocks: 1
+  fc_dims: [512, 256]
+
+data:
+  chestexpert:
+    traincsvpath: data/chestexpert/train.csv
+    validcsvpath: data/chestexpert/valid.csv
+    imageroot: data/chestexpert
