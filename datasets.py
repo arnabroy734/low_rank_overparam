@@ -185,15 +185,11 @@ class CheXpert(Dataset):
         return image, label
 
 
-def create_dataset(name: str, mode: str, configpath: str='config.yaml'):
+def create_dataset(name: str, mode: str, config: dict):
     """
     'name' should be 'chestexpert' or 
     'mode' should be 'train' or 'valid'
     """
-    with open(configpath, "r") as f:
-        config = yaml.safe_load(f)
-        f.close()
-
     train_transform = transforms.Compose([
         transforms.RandomResizedCrop(224, scale=(0.2, 1.)),
         transforms.RandomApply([

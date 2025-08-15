@@ -1,5 +1,6 @@
 from torch import nn
 import yaml
+import torch
 
 class ConvBlock(nn.Module):
     def __init__(self, in_channel: int, out_channel: int, kernel: int):
@@ -73,6 +74,7 @@ def create_basemodel(configpath='config.yaml'):
         with open(configpath, "r") as f:
             config = yaml.safe_load(f)
             f.close()
+        torch.manual_seed(42)
         basemodel = BaseModel(
             conv_blocks=config['model_config']['conv_blocks'],
             channels=config['model_config']['channels'],

@@ -1,8 +1,8 @@
 model_config:
   conv_blocks: 4
-  channels: [1,64,128,256,512]
+  channels: [3,64,128,256,512]
   kernels: [7, 3, 3, 3]
-  categories: 10
+  categories: 5
   fc_blocks: 1
   fc_dims: [512, 256]
 
@@ -11,3 +11,10 @@ data:
     traincsvpath: data/chestexpert/train.csv
     validcsvpath: data/chestexpert/valid.csv
     imageroot: data/chestexpert
+
+train_config:
+  batchsize: 64
+  warmup_steps: 500
+  max_lr: 0.0005
+  min_lr: 0.00001
+  epochs: 100
