@@ -10,11 +10,12 @@ data:
   chestexpert:
     traincsvpath: data/chestexpert/train.csv
     validcsvpath: data/chestexpert/valid.csv
+    crossvalidcsvpath: data/chestexpert/cross_valid.csv
     imageroot: data/chestexpert
 
 train_config:
   batchsize: 64
-  warmup_steps: 500
-  max_lr: 0.0005
+  warmup_steps: 200
+  max_lr: 0.001
   min_lr: 0.00001
-  epochs: 100
+  epochs: 200

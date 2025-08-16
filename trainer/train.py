@@ -1,4 +1,4 @@
-from trainer.util import get_dataloader, CustomLoss, CONFIG, get_lr
+from trainer.util import get_dataloader, CONFIG, get_lr
 from model import create_basemodel
 from overparam.utils import overparameterize
 from datasets import create_dataset
@@ -17,14 +17,11 @@ class Trainer:
 
     ):
         # get the dataloader - 10% from traindata will be used for validation
-        ds = create_dataset(name=dataset_name, mode='train', config=CONFIG)
-        val_size = int(0.1 * len(ds))
-        train_size = len(ds) - val_size
+        trainds = create_dataset(name=dataset_name, mode='train', config=CONFIG)
+        crossvalds = create_dataset(name=dataset_name, mode='cross_valid', config=CONFIG)
 
-
-        train_dataset, val_dataset = random_split(ds, [train_size, val_size])
-        self.trainloader = get_dataloader(train_dataset)
-        self.valloader = get_dataloader(val_dataset)
+        self.trainloader = get_dataloader(trainds)
+        self.valloader = get_dataloader(crossvalds)
 
         # device
         self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -54,7 +51,7 @@ class Trainer:
         Path.mkdir(self.savepath, parents=True, exist_ok=True)
         
         # define loss function
-        self.loss_fn = CustomLoss()
+        self.loss_fn = torch.nn.BCEWithLogitsLoss()
 
         # optimiser
         self.optimiser = torch.optim.Adam(self.model.parameters())

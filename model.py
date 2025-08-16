@@ -6,11 +6,13 @@ class ConvBlock(nn.Module):
     def __init__(self, in_channel: int, out_channel: int, kernel: int):
         super().__init__()
         self.conv = nn.Conv2d(in_channels=in_channel, out_channels=out_channel, stride=1, padding='same', kernel_size=kernel)
+        self.bn = nn.BatchNorm2d(num_features=out_channel)
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
         self.activation = nn.ReLU()
 
     def forward(self, x):
         x = self.conv(x)
+        x = self.bn(x)
         x = self.pool(x)
         x = self.activation(x)
         return x
@@ -29,10 +31,8 @@ class ClsBlock(nn.Module):
     def __init__(self, in_dim: int, categories: int):
         super().__init__()
         self.proj = nn.Linear(in_features=in_dim, out_features=categories)
-        self.activation = nn.Sigmoid()
     def forward(self, x):
         x = self.proj(x)
-        x = self.activation(x)
         return x
 
 class BaseModel(nn.Module):

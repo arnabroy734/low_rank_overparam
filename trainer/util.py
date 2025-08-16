@@ -16,13 +16,6 @@ def get_dataloader(ds: Dataset):
     )
     return dataloader
 
-class CustomLoss(torch.nn.Module):
-    def __init__(self):
-        super().__init__()
-    def forward(self, pred_scores, labels):
-        loss = -(labels*torch.log(pred_scores)+(1-labels)*torch.log(1-pred_scores))
-        loss = torch.mean(loss)
-        return loss
     
 def get_lr(step, total_steps):
     warmup_steps = CONFIG['train_config']['warmup_steps']

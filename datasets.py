@@ -188,22 +188,21 @@ class CheXpert(Dataset):
 def create_dataset(name: str, mode: str, config: dict):
     """
     'name' should be 'chestexpert' or 
-    'mode' should be 'train' or 'valid'
+    'mode' should be 'train', 'cross_valid' or 'valid'
     """
     train_transform = transforms.Compose([
-        transforms.RandomResizedCrop(224, scale=(0.2, 1.)),
+        transforms.RandomResizedCrop(224, scale=(0.7, 1.)),
         transforms.RandomApply([
-            transforms.ColorJitter(0.4, 0.4, 0.4, 0.1)  
+            transforms.ColorJitter(0.4, 0.4, 0.0, 0.0)  
         ], p=0.8),
         transforms.RandomRotation(degrees=(0, 15)),
-        transforms.RandomGrayscale(p=0.2),
         transforms.RandomApply([GaussianBlur([.1, 2.])], p=0.5),
-        transforms.RandomHorizontalFlip(),
+        transforms.RandomHorizontalFlip(p=0.8),
         transforms.ToTensor(),
         transforms.Normalize([0.5056, 0.5056, 0.5056], [0.252, 0.252, 0.252])
     ])
     valid_transform = transforms.Compose([
-        transforms.Resize(size=224),
+        transforms.Resize(size=(224, 224)),
         transforms.ToTensor(),
         transforms.Normalize([0.5056, 0.5056, 0.5056], [0.252, 0.252, 0.252])
     ])
@@ -213,9 +212,13 @@ def create_dataset(name: str, mode: str, config: dict):
             upsample = True
             csvpath = config['data']['chestexpert']['traincsvpath']
             transform = train_transform
-        else:
+        elif mode == 'valid':
             upsample = False
             csvpath = config['data']['chestexpert']['validcsvpath']
+            transform = valid_transform
+        elif mode == 'cross_valid':
+            upsample = False
+            csvpath = config['data']['chestexpert']['crossvalidcsvpath']
             transform = valid_transform
         ds = CheXpert(
             csv_path=str(csvpath),

@@ -1,2 +1,4 @@
 overparam
-data
+data/chestexpert/train
+data/chestexpert/valid
+old_weights
